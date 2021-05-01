@@ -6,7 +6,7 @@ export const getZIndex = (modalCounter: number): number => Z_INDEX_MODAL + modal
 
 type ModalInternalStateType = {
   isOpen: boolean
-  zIndex: number | null
+  zIndex: number
   internalModalCounter: number | null
 }
 

@@ -3,7 +3,7 @@ import useModalInternalState from './useModalInternalState'
 
 const useEscPressed = (
   isOpenModal: boolean,
-  internalModalCounter: number,
+  internalModalCounter: number | null,
   closeOnOverlay: boolean,
   onClose: () => void,
 ): void => {
