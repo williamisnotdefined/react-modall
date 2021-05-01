@@ -1,5 +1,4 @@
 import { useCallback } from 'react'
-// import PropTypes from 'prop-types'
 
 import noOp from './utils/noOp'
 
@@ -13,7 +12,6 @@ type ModalProps = {
 
   closeOnOverlay: boolean
 
-  // children: PropTypes.node
   customAnimation: boolean
   className: string
 }
