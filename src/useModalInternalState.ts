@@ -2,36 +2,39 @@ import { useEffect, useState } from 'react'
 
 const Z_INDEX_MODAL = 2000
 
-export const getZIndex = (modalCounter) => (
-  Z_INDEX_MODAL + (modalCounter * 3)
-)
+export const getZIndex = (modalCounter: number): number => Z_INDEX_MODAL + modalCounter * 3
 
-const useModalInternalState = (isOpenProp) => {
-  const [modalState, setModalState] = useState({
+type ModalInternalStateType = {
+  isOpen: boolean
+  zIndex: number | null
+  internalModalCounter: number | null
+}
+
+const useModalInternalState = (isOpenProp: boolean): ModalInternalStateType => {
+  const [modalState, setModalState] = useState<ModalInternalStateType>({
     isOpen: false,
     zIndex: 0,
-    internalModalCounter: null
+    internalModalCounter: null,
   })
 
   useEffect(() => {
-    // modal é montada aberta
     if (isOpenProp) {
       const internalModalCounter = useModalInternalState.incrementCounter()
 
       setModalState({
         isOpen: true,
         zIndex: getZIndex(internalModalCounter),
-        internalModalCounter
+        internalModalCounter,
       })
     }
 
     return () => {
-      // se a modal for desmonstada aberta
       if (isOpenProp) {
         useModalInternalState.decrementCounter()
       }
     }
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []) // only on component did mount
 
   useEffect(() => {
     if (isOpenProp) {
@@ -40,13 +43,13 @@ const useModalInternalState = (isOpenProp) => {
       setModalState({
         isOpen: true,
         zIndex: getZIndex(internalModalCounter),
-        internalModalCounter
+        internalModalCounter,
       })
     } else {
-      setModalState(modalState => ({
-        ...modalState,
+      setModalState((currentModalState) => ({
+        ...currentModalState,
         isOpen: false,
-        internalModalCounter: null
+        internalModalCounter: null,
       }))
 
       useModalInternalState.decrementCounter()
@@ -64,23 +67,23 @@ const useModalInternalState = (isOpenProp) => {
   return {
     isOpen: modalState.isOpen,
     zIndex: modalState.zIndex,
-    internalModalCounter: modalState.internalModalCounter
+    internalModalCounter: modalState.internalModalCounter,
   }
 }
 
 useModalInternalState.modalCounter = 0 // z-index controller
 
 useModalInternalState.incrementCounter = () => {
-  useModalInternalState.modalCounter = useModalInternalState.modalCounter + 1;
-  return useModalInternalState.modalCounter;
+  useModalInternalState.modalCounter += 1
+  return useModalInternalState.modalCounter
 }
 
 useModalInternalState.decrementCounter = () => {
   if (useModalInternalState.modalCounter > 0) {
-    useModalInternalState.modalCounter = useModalInternalState.modalCounter - 1;
+    useModalInternalState.modalCounter -= 1
   }
 
-  return useModalInternalState.modalCounter;
+  return useModalInternalState.modalCounter
 }
 
 export default useModalInternalState
